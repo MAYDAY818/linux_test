@@ -1,0 +1,9 @@
+#! /bin/sh
+echo "Enter password:"
+read TRY
+SUM=1
+while [ "$TRY" != "secret" -a "$SUM" -lt 5 ]; do
+	echo "Sorry, try again"
+	read TRY
+	SUM=$(($SUM+1))
+done

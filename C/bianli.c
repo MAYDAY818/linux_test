@@ -43,15 +43,15 @@ void* sha256thread(void* args){
     printf("多线程fileinfo.savepath=%s\n",fileinfo->savepath);
     
 
-    char *md5shell=(char *)malloc(sizeof(fileinfo->filenpath)+sizeof(fileinfo->savepath)+1024);
-    printf("打印SHA256shell长度:%ld\n",sizeof(md5shell));
+    char *sha256shell=(char *)malloc(sizeof(fileinfo->filenpath)+sizeof(fileinfo->savepath)+1024);
+    printf("打印SHA256shell长度:%ld\n",sizeof(sha256shell));
 
 
-    sprintf(md5shell,"sha256sum %s >> %sconfig.txt",fileinfo->filenpath,fileinfo->savepath);
-    printf("打印SHA256shell:%s\n执行shell:\n",md5shell);
+    sprintf(sha256shell,"sha256sum %s >> %sconfig.txt",fileinfo->filenpath,fileinfo->savepath);
+    printf("打印SHA256shell:%s\n执行shell:\n",sha256shell);
 
-    system(md5shell);
-    free(md5shell);
+    system(sha256shell);
+    free(sha256shell);
     printf("计算SHA256线程结束\n");
     return NULL;
 }
@@ -92,8 +92,7 @@ void zhaiyao(char *path,char *name,char *savepath){
     printf("摘要结束：\n");
 }
 
-void List(char *path,char *savepath)
-{   
+void List(char *path,char *savepath){   
     printf("遍历目录\n");
     char *FILELIST;
     struct dirent* ent = NULL;
@@ -141,14 +140,13 @@ int main(int argc, char *argv[]){
     free(date);
 
     int ch;
-    opterr = 0;
+    //opterr = 0;
 	
-    
-    while((ch = getopt(argc,argv,"r:l:"))!= -1)
+    while((ch = getopt(argc,argv,"d:l:"))!= -1)
     {
         switch(ch)
         {
-            case 'r': 
+            case 'd': 
                 printf("摘要目录:%s\n",argv[2]);
                 printf("保存地址%s\n",argv[3]);
                 List(argv[2],argv[3]);

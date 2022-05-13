@@ -104,7 +104,7 @@ void* md5thread(void* args){
     printf("多线程fileinfo.savepath=%s\n",fileinfo->savepath);
     
 
-    char *md5shell=(char *)malloc(sizeof(fileinfo->filenpath)+sizeof(fileinfo->savepath)+1024);
+    char *md5shell=(char *)malloc(1024);
     printf("打印MD5shell长度:%ld\n",sizeof(md5shell));
 
 
@@ -127,7 +127,7 @@ void* sha256thread(void* args){
     printf("多线程fileinfo.savepath=%s\n",fileinfo->savepath);
     
 
-    char *sha256shell=(char *)malloc(sizeof(fileinfo->filenpath)+sizeof(fileinfo->savepath)+1024);
+    char *sha256shell=(char *)malloc(1024);
     printf("打印SHA256shell长度:%ld\n",sizeof(sha256shell));
 
 
@@ -140,84 +140,76 @@ void* sha256thread(void* args){
     return NULL;
 }
 
-/* void threadstart(char *fangshi,char *filepath,char *savepath){
-    if (strcmp(fangshi, "a") == 0)
-    {
-        printf("多线程开始\n");
-        pthread_t md5,sha256;
-
-        struct FILE_INFO fileinfo;
-        fileinfo.filenpath=filepath;
-        fileinfo.savepath=savepath;
-        printf("摘要fileinfo.filepath=%s\n",fileinfo.filenpath);
-        printf("摘要fileinfo.savepath=%s\n",fileinfo.savepath);
-        pthread_create(&md5,NULL,md5thread,&fileinfo);
-        pthread_create(&sha256,NULL,sha256thread,&fileinfo);
-        pthread_join(md5,NULL);
-        pthread_join(sha256,NULL);
-        printf("多线程结束\n");
-    }else if (strcmp(fangshi, "m") == 0)
-    {
-         printf("计算MD5线程开始\n");
-    
-        
-        printf("多线程fileinfo.filepath=%s\n",filepath);
-        printf("多线程fileinfo.savepath=%s\n",savepath);
-
-        char *md5shell=(char *)malloc(sizeof(filepath)+sizeof(savepath)+1024);
-        printf("打印MD5shell长度:%ld\n",sizeof(md5shell));
-
-        sprintf(md5shell,"md5sum %s >> %s/config.txt",filepath,savepath);
-        printf("打印MD5shell:%s\n执行shell:\n",md5shell);
-
-        system(md5shell);
-        free(md5shell);
-        printf("计算MD5线程结束\n");
-    }else if (strcmp(fangshi, "s") == 0)
-    {
-        printf("计算SHA256线程开始\n");
-        
-        printf("多线程fileinfo.filepath=%s\n",filepath);
-        printf("多线程fileinfo.savepath=%s\n",savepath);
-        
-        char *sha256shell=(char *)malloc(sizeof(filepath)+sizeof(savepath)+1024);
-        printf("打印SHA256shell长度:%ld\n",sizeof(sha256shell));
-
-        sprintf(sha256shell,"sha256sum %s >> %sconfig.txt",filepath,savepath);
-        printf("打印SHA256shell:%s\n执行shell:\n",sha256shell);
-
-        system(sha256shell);
-        free(sha256shell);
-        printf("计算SHA256线程结束\n");
-    } 
-
-} */
-
 void threadassign(char *fangshi,Lnode * head,char *savepath,int start,int space){
     pthread_t md5[space];
     pthread_t sha256[space];
     struct FILE_INFO fileinfo[space];
     int n=0;
-    printf("多线程赋值\n");
-    for(;n<space;n++){
-        fileinfo[n].filenpath=get(head,start+n);
-        fileinfo[n].savepath=savepath;
-        printf("摘要fileinfo.filepath=%s\n",fileinfo[n].filenpath);
-        printf("摘要fileinfo.savepath=%s\n",fileinfo[n].savepath);
-    }
-    n=0;
-    printf("多线程执行\n");
-    for(;n<space;n++){
-        pthread_create(&md5[n],NULL,md5thread,&fileinfo[n]);
-        pthread_create(&sha256[n],NULL,sha256thread,&fileinfo[n]);
-    }
-    n=0;
-    printf("多线程等待完成");
-    for(;n<space;n++){
-        pthread_join(md5[n],NULL);
-        pthread_join(sha256[n],NULL);
-    }
-    
+    printf("方式：%s\n",fangshi);
+    if (strcmp(fangshi, "a") == 0)
+    {
+        printf("多线程赋值\n");
+        for(;n<space;n++){
+            fileinfo[n].filenpath=get(head,start+n);
+            fileinfo[n].savepath=savepath;
+            printf("摘要fileinfo.filepath=%s\n",fileinfo[n].filenpath);
+            printf("摘要fileinfo.savepath=%s\n",fileinfo[n].savepath);
+        }
+        n=0;
+        printf("多线程执行\n");
+        for(;n<space;n++){
+            pthread_create(&md5[n],NULL,md5thread,&fileinfo[n]);
+            pthread_create(&sha256[n],NULL,sha256thread,&fileinfo[n]);
+        }
+        n=0;
+        printf("多线程等待完成");
+        for(;n<space;n++){
+            pthread_join(md5[n],NULL);
+            pthread_join(sha256[n],NULL);
+        }
+    }else if (strcmp(fangshi, "m") == 0)
+    {
+        printf("计算MD5线程开始\n");
+        printf("多线程赋值\n");
+        for(;n<space;n++){
+            fileinfo[n].filenpath=get(head,start+n);
+            fileinfo[n].savepath=savepath;
+            printf("摘要fileinfo.filepath=%s\n",fileinfo[n].filenpath);
+            printf("摘要fileinfo.savepath=%s\n",fileinfo[n].savepath);
+        }
+        n=0;
+        printf("多线程执行\n");
+        for(;n<space;n++){
+            pthread_create(&md5[n],NULL,md5thread,&fileinfo[n]);
+        }
+        n=0;
+        printf("多线程等待完成");
+        for(;n<space;n++){
+            pthread_join(md5[n],NULL);
+        }
+        printf("计算MD5线程结束\n");
+    }else if (strcmp(fangshi, "s") == 0)
+    {
+        printf("计算SHA256线程开始\n");
+        printf("多线程赋值\n");
+        for(;n<space;n++){
+            fileinfo[n].filenpath=get(head,start+n);
+            fileinfo[n].savepath=savepath;
+            printf("摘要fileinfo.filepath=%s\n",fileinfo[n].filenpath);
+            printf("摘要fileinfo.savepath=%s\n",fileinfo[n].savepath);
+        }
+        n=0;
+        printf("多线程执行\n");
+        for(;n<space;n++){
+            pthread_create(&sha256[n],NULL,sha256thread,&fileinfo[n]);
+        }
+        n=0;
+        printf("多线程等待完成");
+        for(;n<space;n++){
+            pthread_join(sha256[n],NULL);
+        }
+        printf("计算SHA256线程结束\n");
+    } 
 }
 
 void threadstart(char *fangshi,Lnode *head,char *savepath,int space){
@@ -238,7 +230,9 @@ void threadstart(char *fangshi,Lnode *head,char *savepath,int space){
     printf("多线程结束\n");
 }
 
-
+/*
+将文件路径加入到链表中
+*/
 void zhaiyao(char *path,char *name,Lnode *head){
 
     //printf("摘要开始：");
@@ -259,7 +253,7 @@ void zhaiyao(char *path,char *name,Lnode *head){
     printf("摘要结束：\n");
 }
 
-void List(char *fangshi,char *path,char *savepath){   
+void List(char *fangshi,char *path,char *savepath,int thread){   
     printf("遍历目录\n");
     Lnode *phead = create();
     char *FILELIST;
@@ -288,7 +282,7 @@ void List(char *fangshi,char *path,char *savepath){
                 FILELIST=(char *)malloc(sizeof(path)+sizeof(ent->d_name)+40);
                 sprintf(FILELIST,"%s%s/",path,ent->d_name);
                 printf("目录递归%s\n",FILELIST);
-                List(fangshi,FILELIST,savepath);
+                List(fangshi,FILELIST,savepath,thread);
                 printf("目录递归%s结束\n",FILELIST);
                 free(FILELIST);
             } 
@@ -299,7 +293,7 @@ void List(char *fangshi,char *path,char *savepath){
     
     printf("show\n");
     show(phead);
-    threadstart(fangshi,phead,savepath,10);
+    threadstart(fangshi,phead,savepath,thread);
     printf("List遍历结束\n");
     quit(phead);
 }
@@ -308,46 +302,102 @@ void List(char *fangshi,char *path,char *savepath){
  
 int main(int argc, char *argv[]){
 
-    
-
+    int thread=10;
     int ch;
     //opterr = 0;
-    char *fangshi;
-    char *filename;
-    char *savepath;
+    char *fangshi="a";
+    int pathorfile=0;
+    char *filename=(char *)malloc(64);
+    char *path=(char *)malloc(1024);
+    char *savepath=(char *)malloc(1024);
 	
-    while((ch = getopt(argc,argv,"f:o:d:l:"))!= -1)
+    while((ch = getopt(argc,argv,"hf:o:d:l:"))!= -1)
     {
         switch(ch)
         {
+            case 'k':
+                thread=atoi(optarg);
+                printf("线程数:%d",thread);
+                break;
             case 'f':
+                //m时md5，s时sha256，a是全部
                 fangshi=optarg;
+                printf("方式:%s\n",fangshi);
                 break;
             case 'o':
-            printf("%s",optarg);
                 savepath=optarg;
-                //打印time
-                char *date=(char *)malloc(sizeof(savepath)+34);
-                sprintf(date,"date >> %sconfig.txt",savepath);
-                printf("开始时间：%s\n",date);
-                system(date);
-                free(date);
+                printf("保存地址%s\n",savepath);
                 break;
             case 'd': 
-                printf("摘要目录:%s\n",optarg);
-                printf("保存地址%s\n",savepath);
-                //m时md5，s时sha256，a是全部
-                List(fangshi,optarg,savepath);
+                path=optarg;
+                printf("摘要目录:%s\n",path);
                 break;
             case 'l': 
-                printf("摘要文件:%s\n",optarg);
-                printf("保存地址%s\n",savepath);
-                //threadstart(fangshi,optarg,savepath);
+                pathorfile=1;
+                path=optarg;
+                printf("摘要文件:%s\n",path);
                 break;
+            case 'h': 
             default: 
-                printf("错误\n");
+                printf("help\n");
+                printf("k 线程数(默认10)\n");
+                printf("f 方式(m:md5,s:sha256,a:md5&sha256)\n");
+                printf("o 配置文件保存目录\n");
+                printf("d 摘要目录\n");
+                printf("l 摘要文件\n");
+                return 0;
         }
     }
+    //打印time
+    char *date=(char *)malloc(sizeof(savepath)+34);
+    sprintf(date,"date >> %sconfig.txt",savepath);
+    printf("开始时间：%s\n",date);
+    system(date);
+    free(date);
+
+    if(pathorfile==0){
+        List(fangshi,path,savepath,thread);
+    }else{
+        printf("对文件进行操作");
+        if (strcmp(fangshi, "a") == 0)
+        {
+            printf("fileinfo.filepath=%s\n",path);
+            printf("fileinfo.savepath=%s\n",savepath);          
+            char *md5shell=(char *)malloc(1024);
+            char *sha256shell=(char *)malloc(1024);
+            sprintf(md5shell,"md5sum %s >> %sconfig.txt",path,savepath);
+            sprintf(sha256shell,"sha256sum %s >> %sconfig.txt",path,savepath);
+            printf("打印MD5shell:%s\n执行shell:\n",md5shell);
+            printf("打印SHA256shell:%s\n执行shell:\n",sha256shell);
+            system(md5shell);
+            system(sha256shell);
+            free(md5shell);
+            free(sha256shell);
+            printf("计算MD5结束\n");
+            printf("计算SHA256结束\n");
+        }else if (strcmp(fangshi, "m") == 0)
+        {
+            printf("fileinfo.filepath=%s\n",path);
+            printf("fileinfo.savepath=%s\n",savepath);          
+            char *md5shell=(char *)malloc(1024);
+            sprintf(md5shell,"md5sum %s >> %sconfig.txt",path,savepath);
+            printf("打印MD5shell:%s\n执行shell:\n",md5shell);
+            system(md5shell);
+            free(md5shell);
+            printf("计算MD5结束\n");
+        }else if (strcmp(fangshi, "s") == 0)
+        {
+            printf("fileinfo.filepath=%s\n",path);
+            printf("fileinfo.savepath=%s\n",savepath);   
+            char *sha256shell=(char *)malloc(1024);
+            sprintf(sha256shell,"sha256sum %s >> %sconfig.txt",path,savepath);
+            printf("打印SHA256shell:%s\n执行shell:\n",sha256shell);
+            system(sha256shell);
+            free(sha256shell);
+            printf("计算SHA256结束\n");
+        }
+    }
+
     printf("程序结束\n");
     return 0;
 }

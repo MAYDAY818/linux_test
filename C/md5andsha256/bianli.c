@@ -13,14 +13,125 @@
 #define MD5_SIZE		16
 #define MD5_STR_LEN		(MD5_SIZE * 2)
 
+struct FILE_INFO;
 // function declare
 int Compute_string_md5(unsigned char *dest_str, unsigned int dest_len, char *md5_str);
 int Compute_file_md5(const char *file_path, char *md5_str);
 
+void* md5thread(void* args);
+void* sha256thread(void* args);
+void threadstart(char *fangshi,char *filepath,char *savepath);
+void zhaiyao(char *fangshi,char *path,char *name,char *savepath);
+void List(char *fangshi,char *path,char *savepath);
+
+ 
+int main(int argc, char *argv[]){
+
+    int ch;
+    //opterr = 0;
+    char *fangshi;
+    char *savepath;
+	
+    while((ch = getopt(argc,argv,"f:o:d:l:"))!= -1)
+    {
+        switch(ch)
+        {
+            case 'f':
+                fangshi=optarg;
+                break;
+            case 'o':
+            printf("%s",optarg);
+                savepath=optarg;
+                //打印time
+                char *date=(char *)malloc(sizeof(savepath)+34);
+                sprintf(date,"date >> %sconfig.txt",savepath);
+                printf("开始时间：%s\n",date);
+                system(date);
+                free(date);
+                break;
+            case 'd': 
+                printf("摘要目录:%s\n",optarg);
+                printf("保存地址%s\n",savepath);
+                //m时md5，s时sha256，a是全部
+                List(fangshi,optarg,savepath);
+                break;
+            case 'l': 
+                printf("摘要文件:%s\n",optarg);
+                printf("保存地址%s\n",savepath);
+                threadstart(fangshi,optarg,savepath);
+                break;
+            default: 
+                printf("错误\n");
+        }
+    }
+    printf("程序结束\n");
+    return 0;
+}
 
 struct FILE_INFO{
     char *filenpath,*savepath;
 };
+
+/**
+ * compute the value of a file
+ * @param  file_path
+ * @param  md5_str
+ * @return 0: ok, -1: fail
+ */
+int Compute_file_md5(const char *file_path, char *md5_str)
+{
+	int i;
+	int fd;
+	int ret;
+	unsigned char data[READ_DATA_SIZE];
+	unsigned char md5_value[MD5_SIZE];
+	MD5_CTX md5;
+
+	fd = open(file_path, O_RDONLY);
+	if (-1 == fd)
+	{
+		perror("open");
+		return -1;
+	}
+
+	// init md5
+	MD5Init(&md5);
+
+	while (1)
+	{
+		ret = read(fd, data, READ_DATA_SIZE);
+		if (-1 == ret)
+		{
+			perror("read");
+			close(fd);
+			return -1;
+		}
+
+		MD5Update(&md5, data, ret);
+
+		if (0 == ret || ret < READ_DATA_SIZE)
+		{
+			break;
+		}
+	}
+
+	close(fd);
+
+	MD5Final(&md5, md5_value);
+
+	// convert md5 value to md5 string
+	for(i = 0; i < MD5_SIZE; i++)
+	{
+		snprintf(md5_str + i*2, 2+1, "%02x", md5_value[i]);
+	}
+
+	return 0;
+}
+
+/**
+ * MD5 thread
+ * @param FILE_INFO
+ */
 
 void* md5thread(void* args){
 
@@ -60,6 +171,11 @@ void* md5thread(void* args){
     return NULL;
 }
 
+/**
+ * SHA256 thread
+ * @param FILE_INFO
+ */
+
 void* sha256thread(void* args){
     printf("计算SHA256线程开始\n");
     
@@ -82,6 +198,13 @@ void* sha256thread(void* args){
     printf("计算SHA256线程结束\n");
     return NULL;
 }
+
+/**
+ * start thread
+ * @param fangshi
+ * @param filepath
+ * @param savepath
+ */
 
 void threadstart(char *fangshi,char *filepath,char *savepath){
     if (strcmp(fangshi, "a") == 0)
@@ -151,6 +274,13 @@ void threadstart(char *fangshi,char *filepath,char *savepath){
 
 }
 
+/**
+ * zhiyao 文件路径拼接
+ * @param fangshi
+ * @param path
+ * @param name
+ * @param savepath
+ */
 
 void zhaiyao(char *fangshi,char *path,char *name,char *savepath){
 
@@ -167,6 +297,13 @@ void zhaiyao(char *fangshi,char *path,char *name,char *savepath){
     free(FILEPATH);
     printf("摘要结束：\n");
 }
+
+/**
+ * 遍历文件及目录
+ * @param fangshi
+ * @param path
+ * @param savepath
+ */
 
 void List(char *fangshi,char *path,char *savepath){   
     printf("遍历目录\n");
@@ -203,135 +340,3 @@ void List(char *fangshi,char *path,char *savepath){
     }
     printf("List遍历结束\n");
 }
-
-
- 
-int main(int argc, char *argv[]){
-
-    
-
-    int ch;
-    //opterr = 0;
-    char *fangshi;
-    char *savepath;
-	
-    while((ch = getopt(argc,argv,"f:o:d:l:"))!= -1)
-    {
-        switch(ch)
-        {
-            case 'f':
-                fangshi=optarg;
-                break;
-            case 'o':
-            printf("%s",optarg);
-                savepath=optarg;
-                //打印time
-                char *date=(char *)malloc(sizeof(savepath)+34);
-                sprintf(date,"date >> %sconfig.txt",savepath);
-                printf("开始时间：%s\n",date);
-                system(date);
-                free(date);
-                break;
-            case 'd': 
-                printf("摘要目录:%s\n",optarg);
-                printf("保存地址%s\n",savepath);
-                //m时md5，s时sha256，a是全部
-                List(fangshi,optarg,savepath);
-                break;
-            case 'l': 
-                printf("摘要文件:%s\n",optarg);
-                printf("保存地址%s\n",savepath);
-                threadstart(fangshi,optarg,savepath);
-                break;
-            default: 
-                printf("错误\n");
-        }
-    }
-    printf("程序结束\n");
-    return 0;
-}
-
-/**
- * compute the value of a string
- * @param  dest_str
- * @param  dest_len
- * @param  md5_str
- */
-int Compute_string_md5(unsigned char *dest_str, unsigned int dest_len, char *md5_str)
-{
-	int i;
-	unsigned char md5_value[MD5_SIZE];
-	MD5_CTX md5;
-
-	// init md5
-	MD5Init(&md5);
-
-	MD5Update(&md5, dest_str, dest_len);
-
-	MD5Final(&md5, md5_value);
-
-	// convert md5 value to md5 string
-	for(i = 0; i < MD5_SIZE; i++)
-	{
-		snprintf(md5_str + i*2, 2+1, "%02x", md5_value[i]);
-	}
-
-	return 0;
-}
-
-/**
- * compute the value of a file
- * @param  file_path
- * @param  md5_str
- * @return 0: ok, -1: fail
- */
-int Compute_file_md5(const char *file_path, char *md5_str)
-{
-	int i;
-	int fd;
-	int ret;
-	unsigned char data[READ_DATA_SIZE];
-	unsigned char md5_value[MD5_SIZE];
-	MD5_CTX md5;
-
-	fd = open(file_path, O_RDONLY);
-	if (-1 == fd)
-	{
-		perror("open");
-		return -1;
-	}
-
-	// init md5
-	MD5Init(&md5);
-
-	while (1)
-	{
-		ret = read(fd, data, READ_DATA_SIZE);
-		if (-1 == ret)
-		{
-			perror("read");
-			close(fd);
-			return -1;
-		}
-
-		MD5Update(&md5, data, ret);
-
-		if (0 == ret || ret < READ_DATA_SIZE)
-		{
-			break;
-		}
-	}
-
-	close(fd);
-
-	MD5Final(&md5, md5_value);
-
-	// convert md5 value to md5 string
-	for(i = 0; i < MD5_SIZE; i++)
-	{
-		snprintf(md5_str + i*2, 2+1, "%02x", md5_value[i]);
-	}
-
-	return 0;
-}
-

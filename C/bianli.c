@@ -9,6 +9,90 @@
 struct FILE_INFO{
     char *filenpath,*savepath;
 };
+/*
+创建链表，用来保存文件路径
+以下是对链表的操作
+*/
+typedef struct Lnode
+{
+    char *data;
+    struct Lnode *next;
+} Lnode, *LinkList;
+
+Lnode *create (void)
+{
+    Lnode *pnode;
+    pnode = (Lnode *) malloc (sizeof (Lnode));
+    pnode->next = NULL;
+    return pnode;
+}
+
+int add(Lnode* phead,char *path){
+    Lnode* p = phead;
+    Lnode* s;
+    int sum=0;
+    s = (Lnode *) malloc (sizeof (Lnode));
+    char *FILEPATH=(char *)malloc(1024);
+    strcpy(FILEPATH,path);
+    if(s == NULL)
+        perror("malloc error");
+    s->data=FILEPATH;
+    while(p->next!=NULL){
+        p=p->next;
+        sum++;
+    }
+    p->next=s;
+    s->next=NULL;
+    sum++;
+    printf("%s\n",s->data);
+    return sum;
+}
+
+int getnum(Lnode* phead){
+    Lnode* p = phead;
+    int sum=0;
+    while(p->next!=NULL){
+        p=p->next;
+        sum++;
+    }
+    return sum;
+}
+
+void show(Lnode *q){
+    int i=1;
+    Lnode *temp = q->next;
+    temp = q->next;
+    while (temp != NULL){
+        printf ("第%d个数据%s\n",i,temp->data);
+        temp = temp->next;
+        i++;
+    }
+}
+
+char* get(Lnode *q,int num){
+    int i=1;
+    char *path;
+    Lnode *temp = q->next;
+    temp = q->next;
+    while (i<num){
+        temp = temp->next;
+        i++;
+    }
+    printf("num:%d第%d个数据%s\n",num,i,temp->data);
+    return temp->data;
+}
+
+void quit (Lnode * head)
+{
+    Lnode *p = head->next;
+    Lnode *q;
+    while (p != NULL){
+        q = p;
+        p = p->next;
+        free(q->data);
+        free(q);
+    }
+}
 
 void* md5thread(void* args){
     printf("计算MD5线程开始\n");
@@ -56,7 +140,7 @@ void* sha256thread(void* args){
     return NULL;
 }
 
-void threadstart(char *fangshi,char *filepath,char *savepath){
+/* void threadstart(char *fangshi,char *filepath,char *savepath){
     if (strcmp(fangshi, "a") == 0)
     {
         printf("多线程开始\n");
@@ -107,20 +191,69 @@ void threadstart(char *fangshi,char *filepath,char *savepath){
         printf("计算SHA256线程结束\n");
     } 
 
+} */
+
+void threadassign(char *fangshi,Lnode * head,char *savepath,int start,int space){
+    pthread_t md5[space];
+    pthread_t sha256[space];
+    struct FILE_INFO fileinfo[space];
+    int n=0;
+    printf("多线程赋值\n");
+    for(;n<space;n++){
+        fileinfo[n].filenpath=get(head,start+n);
+        fileinfo[n].savepath=savepath;
+        printf("摘要fileinfo.filepath=%s\n",fileinfo[n].filenpath);
+        printf("摘要fileinfo.savepath=%s\n",fileinfo[n].savepath);
+    }
+    n=0;
+    printf("多线程执行\n");
+    for(;n<space;n++){
+        pthread_create(&md5[n],NULL,md5thread,&fileinfo[n]);
+        pthread_create(&sha256[n],NULL,sha256thread,&fileinfo[n]);
+    }
+    n=0;
+    printf("多线程等待完成");
+    for(;n<space;n++){
+        pthread_join(md5[n],NULL);
+        pthread_join(sha256[n],NULL);
+    }
+    
+}
+
+void threadstart(char *fangshi,Lnode *head,char *savepath,int space){
+    printf("多线程开始\n");
+    int sum=getnum(head);
+    printf("多线程sum:%d\n",sum);
+    int n=0;
+    int m=space;
+    printf("assign\n");
+    while(sum-m>0){
+        threadassign(fangshi,head,savepath,n,space);
+        n=n+space;
+        m=m+space;
+    }
+    if(sum>m-space){
+        threadassign(fangshi,head,savepath,n,sum-m+space);
+    }
+    printf("多线程结束\n");
 }
 
 
-void zhaiyao(char *fangshi,char *path,char *name,char *savepath){
+void zhaiyao(char *path,char *name,Lnode *head){
 
-    printf("摘要开始：");
-    
+    //printf("摘要开始：");
+    int i;
 
-    char *FILEPATH=(char *)malloc(sizeof(path)+sizeof(name)+1024);
+    char *FILEPATH=(char *)malloc(1024);
     strcpy(FILEPATH,path);
     strcat(FILEPATH,name);
     printf("文件绝对路径：%s\n",FILEPATH);
-
-    threadstart(fangshi,FILEPATH,savepath);
+    i=add(head,FILEPATH);
+    printf("第%d个数据\n",i);
+    printf("函数返回值:%s\n",get(head,i));
+    //printf("pop第%s个数据\n",pop(head,i));
+    
+    //threadstart(fangshi,FILEPATH,savepath);
     
     free(FILEPATH);
     printf("摘要结束：\n");
@@ -128,6 +261,7 @@ void zhaiyao(char *fangshi,char *path,char *name,char *savepath){
 
 void List(char *fangshi,char *path,char *savepath){   
     printf("遍历目录\n");
+    Lnode *phead = create();
     char *FILELIST;
     struct dirent* ent = NULL;
     DIR *pDir;
@@ -136,14 +270,16 @@ void List(char *fangshi,char *path,char *savepath){
     while (NULL != (ent=readdir(pDir)))
     {
         //printf("reclen=%d    type=%d\t", ent->d_reclen, ent->d_type);
-        printf("%s\n",ent->d_name);
+        //printf("%s\n",ent->d_name);
         if (ent->d_type==8)
         {
             //printf("文件路径：%s\n文件名称：%s\n保存配置路径：%s\n",path,ent->d_name,savepath);
-            zhaiyao(fangshi,path,ent->d_name,savepath);
+            //
+            zhaiyao(path,ent->d_name,phead);
         }
         else if(ent->d_type==4)
         {
+
             if(strcmp(ent->d_name,"..")==0 || strcmp(ent->d_name,".")==0) {
                 printf("[.]或者[..]的目录[%s]\n",ent->d_name);
             }
@@ -155,11 +291,17 @@ void List(char *fangshi,char *path,char *savepath){
                 List(fangshi,FILELIST,savepath);
                 printf("目录递归%s结束\n",FILELIST);
                 free(FILELIST);
-            }
+            } 
+
                 
         }
     }
+    
+    printf("show\n");
+    show(phead);
+    threadstart(fangshi,phead,savepath,10);
     printf("List遍历结束\n");
+    quit(phead);
 }
 
 
@@ -200,7 +342,7 @@ int main(int argc, char *argv[]){
             case 'l': 
                 printf("摘要文件:%s\n",optarg);
                 printf("保存地址%s\n",savepath);
-                threadstart(fangshi,optarg,savepath);
+                //threadstart(fangshi,optarg,savepath);
                 break;
             default: 
                 printf("错误\n");

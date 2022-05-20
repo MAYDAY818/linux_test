@@ -212,7 +212,7 @@ void threadassign(char *fangshi,Lnode * head,char *savepath,int start,int space)
     } 
 }
 
-void threadstart(char *fangshi,Lnode *head,char *savepath,int space){
+void threadprepare(char *fangshi,Lnode *head,char *savepath,int space){
     printf("多线程开始\n");
     int sum=getnum(head);
     printf("多线程sum:%d\n",sum);
@@ -233,7 +233,7 @@ void threadstart(char *fangshi,Lnode *head,char *savepath,int space){
 /*
 将文件路径加入到链表中
 */
-void zhaiyao(char *path,char *name,Lnode *head){
+void LinkAdd(char *path,char *name,Lnode *head){
 
     //printf("摘要开始：");
     int i;
@@ -252,7 +252,7 @@ void zhaiyao(char *path,char *name,Lnode *head){
     free(FILEPATH);
     printf("摘要结束：\n");
 }
-
+/*
 void List(char *fangshi,char *path,char *savepath,int thread){   
     printf("遍历目录\n");
     Lnode *phead = create();
@@ -297,15 +297,62 @@ void List(char *fangshi,char *path,char *savepath,int thread){
     printf("List遍历结束\n");
     quit(phead);
 }
+*/
+void PathTraversal(char *path,Lnode *head){   
+    printf("遍历目录\n");
+    char *FILELIST;
+    struct dirent* ent = NULL;
+    DIR *pDir;
+    pDir=opendir(path);
+    //d_reclen：16表示子目录或以.开头的隐藏文件，24表示普通文本文件,28为二进制文件，还有其他……
+    while (NULL != (ent=readdir(pDir)))
+    {
+        //printf("reclen=%d    type=%d\t", ent->d_reclen, ent->d_type);
+        //printf("%s\n",ent->d_name);
+        if (ent->d_type==8)
+        {
+            //printf("文件路径：%s\n文件名称：%s\n保存配置路径：%s\n",path,ent->d_name,savepath);
+            //
+            LinkAdd(path,ent->d_name,head);
+        }
+        else if(ent->d_type==4)
+        {
 
+            if(strcmp(ent->d_name,"..")==0 || strcmp(ent->d_name,".")==0) {
+                printf("[.]或者[..]的目录[%s]\n",ent->d_name);
+            }
+            else{
+                printf("目录[%s]\n\n", ent->d_name);
+                FILELIST=(char *)malloc(sizeof(path)+sizeof(ent->d_name)+40);
+                sprintf(FILELIST,"%s%s/",path,ent->d_name);
+                printf("目录递归%s\n",FILELIST);
+                PathTraversal(FILELIST,head);
+                printf("目录递归%s结束\n",FILELIST);
+                free(FILELIST);
+            } 
 
+                
+        }
+    }
+    printf("List遍历结束\n");
+}
  
+void printfhelp(){
+    printf("help\n");
+    printf("-k 线程数(默认10)\n");
+    printf("-f 方式(m:md5,s:sha256,a:md5&sha256)\n");
+    printf("-o 配置文件保存目录\n");
+    printf("-d 摘要目录\n");
+    printf("-l 摘要文件\n");
+}
 int main(int argc, char *argv[]){
 
     int thread=10;
     int ch;
     //opterr = 0;
+    Lnode *phead = create();
     char *fangshi="a";
+    //目录：0；文件：1；
     int pathorfile=0;
     char *filename=(char *)malloc(64);
     char *path=(char *)malloc(1024);
@@ -339,15 +386,17 @@ int main(int argc, char *argv[]){
                 break;
             case 'h': 
             default: 
-                printf("help\n");
-                printf("k 线程数(默认10)\n");
-                printf("f 方式(m:md5,s:sha256,a:md5&sha256)\n");
-                printf("o 配置文件保存目录\n");
-                printf("d 摘要目录\n");
-                printf("l 摘要文件\n");
-                return 0;
+                printfhelp();
+                return 1;
         }
     }
+
+    if(strlen(savepath) == 0 || strlen(path) == 0){
+        printf("参数输入缺失\n");
+        printfhelp();
+        return 2;
+    }    
+
     //打印time
     char *date=(char *)malloc(sizeof(savepath)+34);
     sprintf(date,"date >> %sconfig.txt",savepath);
@@ -356,7 +405,11 @@ int main(int argc, char *argv[]){
     free(date);
 
     if(pathorfile==0){
-        List(fangshi,path,savepath,thread);
+        printf("对目录进行操作\n");
+        PathTraversal(path,phead);
+        show(phead);
+        threadprepare(fangshi,phead,savepath,thread);
+        quit(phead);
     }else{
         printf("对文件进行操作\n");
         if (strcmp(fangshi, "a") == 0)

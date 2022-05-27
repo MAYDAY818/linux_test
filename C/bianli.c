@@ -108,7 +108,7 @@ void* md5thread(void* args){
     printf("打印MD5shell长度:%ld\n",sizeof(md5shell));
 
 
-    sprintf(md5shell,"md5sum %s >> %sconfig.txt",fileinfo->filenpath,fileinfo->savepath);
+    sprintf(md5shell,"md5sum %s >> %s/config.txt",fileinfo->filenpath,fileinfo->savepath);
     printf("打印MD5shell:%s\n执行shell:\n",md5shell);
 
     system(md5shell);
@@ -131,7 +131,7 @@ void* sha256thread(void* args){
     printf("打印SHA256shell长度:%ld\n",sizeof(sha256shell));
 
 
-    sprintf(sha256shell,"sha256sum %s >> %sconfig.txt",fileinfo->filenpath,fileinfo->savepath);
+    sprintf(sha256shell,"sha256sum %s >> %s/config.txt",fileinfo->filenpath,fileinfo->savepath);
     printf("打印SHA256shell:%s\n执行shell:\n",sha256shell);
 
     system(sha256shell);
@@ -150,7 +150,7 @@ void threadassign(char *fangshi,Lnode * head,char *savepath,int start,int space)
     {
         printf("多线程赋值\n");
         for(;n<space;n++){
-            fileinfo[n].filenpath=get(head,start+n);
+            fileinfo[n].filenpath=get(head,start+n+1);
             fileinfo[n].savepath=savepath;
             printf("摘要fileinfo.filepath=%s\n",fileinfo[n].filenpath);
             printf("摘要fileinfo.savepath=%s\n",fileinfo[n].savepath);
@@ -172,7 +172,7 @@ void threadassign(char *fangshi,Lnode * head,char *savepath,int start,int space)
         printf("计算MD5线程开始\n");
         printf("多线程赋值\n");
         for(;n<space;n++){
-            fileinfo[n].filenpath=get(head,start+n);
+            fileinfo[n].filenpath=get(head,start+n+1);
             fileinfo[n].savepath=savepath;
             printf("摘要fileinfo.filepath=%s\n",fileinfo[n].filenpath);
             printf("摘要fileinfo.savepath=%s\n",fileinfo[n].savepath);
@@ -193,7 +193,7 @@ void threadassign(char *fangshi,Lnode * head,char *savepath,int start,int space)
         printf("计算SHA256线程开始\n");
         printf("多线程赋值\n");
         for(;n<space;n++){
-            fileinfo[n].filenpath=get(head,start+n);
+            fileinfo[n].filenpath=get(head,start+n+1);
             fileinfo[n].savepath=savepath;
             printf("摘要fileinfo.filepath=%s\n",fileinfo[n].filenpath);
             printf("摘要fileinfo.savepath=%s\n",fileinfo[n].savepath);

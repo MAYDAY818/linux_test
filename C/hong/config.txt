@@ -1,0 +1,71 @@
+Friday, May 27, 2022 AM09:47:58 HKT
+20a36c1f86e7fcd6e4e5f7f5ce8abf73  /home/mayday/linux_test/C/stack/push.c
+7aa4a71a966543657c77d59886406e03  /home/mayday/linux_test/C/stack/is_empty.c
+bfd57d69a1e1bf0e20c45073faffabfcffa9ac185afddb0d926c65fdff26c451  /home/mayday/linux_test/C/stack/is_empty.c
+4594654814bdc7961b05197aeb1fdd75065497ae5f4b257c9c38d3612dfa0e44  /home/mayday/linux_test/C/stack/push.c
+4594654814bdc7961b05197aeb1fdd75065497ae5f4b257c9c38d3612dfa0e44  /home/mayday/linux_test/C/stack/push.c
+287f605260e79a56334747d2678f494f  /home/mayday/linux_test/C/stack/stack.h
+48735f1fe18fadd8ae22a6c35847102af3e7da6cdc2ec5cb8fbab6ed03a0d300  /home/mayday/linux_test/C/stack/stack.h
+9a9053808ce2df9f3d2c4317d68b1d5d7278dbdd3403d953cecbdfa8333fdd42  /home/mayday/linux_test/C/stack/pop.c
+20a36c1f86e7fcd6e4e5f7f5ce8abf73  /home/mayday/linux_test/C/stack/push.c
+45b55cf46b77a1a4013aa9eaba93b314  /home/mayday/linux_test/C/stack/pop.c
+Friday, May 27, 2022 AM09:57:43 HKT
+Friday, May 27, 2022 AM09:58:42 HKT
+20a36c1f86e7fcd6e4e5f7f5ce8abf73  /home/mayday/linux_test/C/stack/push.c
+4594654814bdc7961b05197aeb1fdd75065497ae5f4b257c9c38d3612dfa0e44  /home/mayday/linux_test/C/stack/push.c
+287f605260e79a56334747d2678f494f  /home/mayday/linux_test/C/stack/stack.h
+bfd57d69a1e1bf0e20c45073faffabfcffa9ac185afddb0d926c65fdff26c451  /home/mayday/linux_test/C/stack/is_empty.c
+9a9053808ce2df9f3d2c4317d68b1d5d7278dbdd3403d953cecbdfa8333fdd42  /home/mayday/linux_test/C/stack/pop.c
+7aa4a71a966543657c77d59886406e03  /home/mayday/linux_test/C/stack/is_empty.c
+48735f1fe18fadd8ae22a6c35847102af3e7da6cdc2ec5cb8fbab6ed03a0d300  /home/mayday/linux_test/C/stack/stack.h
+be4d26e359856d5875fd13b4aa5c82a3  /home/mayday/linux_test/C/stack/stack.c
+2727dfeef6fe99be5ff5adffe9d60a7e8a686fa330bdadf95a5ba21fc56877b9  /home/mayday/linux_test/C/stack/stack.c
+45b55cf46b77a1a4013aa9eaba93b314  /home/mayday/linux_test/C/stack/pop.c
+Friday, May 27, 2022 AM10:00:07 HKT
+Friday, May 27, 2022 AM10:01:35 HKT
+Friday, May 27, 2022 AM10:02:33 HKT
+Friday, May 27, 2022 AM10:02:46 HKT
+20a36c1f86e7fcd6e4e5f7f5ce8abf73  /home/mayday/linux_test/C/stack/push.c
+45b55cf46b77a1a4013aa9eaba93b314  /home/mayday/linux_test/C/stack/pop.c
+4594654814bdc7961b05197aeb1fdd75065497ae5f4b257c9c38d3612dfa0e44  /home/mayday/linux_test/C/stack/push.c
+9a9053808ce2df9f3d2c4317d68b1d5d7278dbdd3403d953cecbdfa8333fdd42  /home/mayday/linux_test/C/stack/pop.c
+4594654814bdc7961b05197aeb1fdd75065497ae5f4b257c9c38d3612dfa0e44  /home/mayday/linux_test/C/stack/push.c
+48735f1fe18fadd8ae22a6c35847102af3e7da6cdc2ec5cb8fbab6ed03a0d300  /home/mayday/linux_test/C/stack/stack.h
+bfd57d69a1e1bf0e20c45073faffabfcffa9ac185afddb0d926c65fdff26c451  /home/mayday/linux_test/C/stack/is_empty.c
+7aa4a71a966543657c77d59886406e03  /home/mayday/linux_test/C/stack/is_empty.c
+287f605260e79a56334747d2678f494f  /home/mayday/linux_test/C/stack/stack.h
+20a36c1f86e7fcd6e4e5f7f5ce8abf73  /home/mayday/linux_test/C/stack/push.c
+Friday, May 27, 2022 AM10:03:26 HKT
+9a9053808ce2df9f3d2c4317d68b1d5d7278dbdd3403d953cecbdfa8333fdd42  /home/mayday/linux_test/C/stack/pop.c
+20a36c1f86e7fcd6e4e5f7f5ce8abf73  /home/mayday/linux_test/C/stack/push.c
+bfd57d69a1e1bf0e20c45073faffabfcffa9ac185afddb0d926c65fdff26c451  /home/mayday/linux_test/C/stack/is_empty.c
+7aa4a71a966543657c77d59886406e03  /home/mayday/linux_test/C/stack/is_empty.c
+287f605260e79a56334747d2678f494f  /home/mayday/linux_test/C/stack/stack.h
+48735f1fe18fadd8ae22a6c35847102af3e7da6cdc2ec5cb8fbab6ed03a0d300  /home/mayday/linux_test/C/stack/stack.h
+45b55cf46b77a1a4013aa9eaba93b314  /home/mayday/linux_test/C/stack/pop.c
+4594654814bdc7961b05197aeb1fdd75065497ae5f4b257c9c38d3612dfa0e44  /home/mayday/linux_test/C/stack/push.c
+2727dfeef6fe99be5ff5adffe9d60a7e8a686fa330bdadf95a5ba21fc56877b9  /home/mayday/linux_test/C/stack/stack.c
+be4d26e359856d5875fd13b4aa5c82a3  /home/mayday/linux_test/C/stack/stack.c
+Friday, May 27, 2022 AM10:04:10 HKT
+20a36c1f86e7fcd6e4e5f7f5ce8abf73  /home/mayday/linux_test/C/stack///push.c
+4594654814bdc7961b05197aeb1fdd75065497ae5f4b257c9c38d3612dfa0e44  /home/mayday/linux_test/C/stack///push.c
+45b55cf46b77a1a4013aa9eaba93b314  /home/mayday/linux_test/C/stack///pop.c
+7aa4a71a966543657c77d59886406e03  /home/mayday/linux_test/C/stack///is_empty.c
+bfd57d69a1e1bf0e20c45073faffabfcffa9ac185afddb0d926c65fdff26c451  /home/mayday/linux_test/C/stack///is_empty.c
+287f605260e79a56334747d2678f494f  /home/mayday/linux_test/C/stack///stack.h
+48735f1fe18fadd8ae22a6c35847102af3e7da6cdc2ec5cb8fbab6ed03a0d300  /home/mayday/linux_test/C/stack///stack.h
+9a9053808ce2df9f3d2c4317d68b1d5d7278dbdd3403d953cecbdfa8333fdd42  /home/mayday/linux_test/C/stack///pop.c
+be4d26e359856d5875fd13b4aa5c82a3  /home/mayday/linux_test/C/stack///stack.c
+2727dfeef6fe99be5ff5adffe9d60a7e8a686fa330bdadf95a5ba21fc56877b9  /home/mayday/linux_test/C/stack///stack.c
+Friday, May 27, 2022 AM10:05:45 HKT
+Friday, May 27, 2022 AM10:07:01 HKT
+4594654814bdc7961b05197aeb1fdd75065497ae5f4b257c9c38d3612dfa0e44  /home/mayday/linux_test/C/stack///push.c
+be4d26e359856d5875fd13b4aa5c82a3  /home/mayday/linux_test/C/stack///stack.c
+48735f1fe18fadd8ae22a6c35847102af3e7da6cdc2ec5cb8fbab6ed03a0d300  /home/mayday/linux_test/C/stack///stack.h
+bfd57d69a1e1bf0e20c45073faffabfcffa9ac185afddb0d926c65fdff26c451  /home/mayday/linux_test/C/stack///is_empty.c
+9a9053808ce2df9f3d2c4317d68b1d5d7278dbdd3403d953cecbdfa8333fdd42  /home/mayday/linux_test/C/stack///pop.c
+20a36c1f86e7fcd6e4e5f7f5ce8abf73  /home/mayday/linux_test/C/stack///push.c
+45b55cf46b77a1a4013aa9eaba93b314  /home/mayday/linux_test/C/stack///pop.c
+7aa4a71a966543657c77d59886406e03  /home/mayday/linux_test/C/stack///is_empty.c
+2727dfeef6fe99be5ff5adffe9d60a7e8a686fa330bdadf95a5ba21fc56877b9  /home/mayday/linux_test/C/stack///stack.c
+287f605260e79a56334747d2678f494f  /home/mayday/linux_test/C/stack///stack.h

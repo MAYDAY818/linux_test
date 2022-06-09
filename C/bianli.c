@@ -418,8 +418,8 @@ int main(int argc, char *argv[]){
             printf("fileinfo.savepath=%s\n",savepath);          
             char *md5shell=(char *)malloc(1024);
             char *sha256shell=(char *)malloc(1024);
-            sprintf(md5shell,"md5sum %s >> %sconfig.txt",path,savepath);
-            sprintf(sha256shell,"sha256sum %s >> %sconfig.txt",path,savepath);
+            sprintf(md5shell,"md5sum %s >> %s/config.txt",path,savepath);
+            sprintf(sha256shell,"sha256sum %s >> %s/config.txt",path,savepath);
             printf("打印MD5shell:%s\n执行shell:\n",md5shell);
             printf("打印SHA256shell:%s\n执行shell:\n",sha256shell);
             system(md5shell);
@@ -433,7 +433,7 @@ int main(int argc, char *argv[]){
             printf("fileinfo.filepath=%s\n",path);
             printf("fileinfo.savepath=%s\n",savepath);          
             char *md5shell=(char *)malloc(1024);
-            sprintf(md5shell,"md5sum %s >> %sconfig.txt",path,savepath);
+            sprintf(md5shell,"md5sum %s >> %s/config.txt",path,savepath);
             printf("打印MD5shell:%s\n执行shell:\n",md5shell);
             system(md5shell);
             free(md5shell);
@@ -443,7 +443,7 @@ int main(int argc, char *argv[]){
             printf("fileinfo.filepath=%s\n",path);
             printf("fileinfo.savepath=%s\n",savepath);   
             char *sha256shell=(char *)malloc(1024);
-            sprintf(sha256shell,"sha256sum %s >> %sconfig.txt",path,savepath);
+            sprintf(sha256shell,"sha256sum %s >> %s/config.txt",path,savepath);
             printf("打印SHA256shell:%s\n执行shell:\n",sha256shell);
             system(sha256shell);
             free(sha256shell);

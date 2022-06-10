@@ -108,7 +108,7 @@ void* md5thread(void* args){
     printf("打印MD5shell长度:%ld\n",sizeof(md5shell));
 
 
-    sprintf(md5shell,"md5sum %s >> %s/config.txt",fileinfo->filenpath,fileinfo->savepath);
+    sprintf(md5shell,"md5sum %s >> %s/log.txt",fileinfo->filenpath,fileinfo->savepath);
     printf("打印MD5shell:%s\n执行shell:\n",md5shell);
 
     system(md5shell);
@@ -131,7 +131,7 @@ void* sha256thread(void* args){
     printf("打印SHA256shell长度:%ld\n",sizeof(sha256shell));
 
 
-    sprintf(sha256shell,"sha256sum %s >> %s/config.txt",fileinfo->filenpath,fileinfo->savepath);
+    sprintf(sha256shell,"sha256sum %s >> %s/log.txt",fileinfo->filenpath,fileinfo->savepath);
     printf("打印SHA256shell:%s\n执行shell:\n",sha256shell);
 
     system(sha256shell);
@@ -358,13 +358,13 @@ int main(int argc, char *argv[]){
     char *path=(char *)malloc(1024);
     char *savepath=(char *)malloc(1024);
 	
-    while((ch = getopt(argc,argv,"hf:o:d:l:"))!= -1)
+    while((ch = getopt(argc,argv,"k:f:o:d:l:"))!= -1)
     {
         switch(ch)
         {
             case 'k':
                 thread=atoi(optarg);
-                printf("线程数:%d",thread);
+                printf("线程数:%d\n",thread);
                 break;
             case 'f':
                 //m时md5，s时sha256，a是全部
@@ -383,8 +383,7 @@ int main(int argc, char *argv[]){
                 pathorfile=1;
                 path=optarg;
                 printf("摘要文件:%s\n",path);
-                break;
-            case 'h': 
+                break; 
             default: 
                 printfhelp();
                 return 1;
@@ -399,7 +398,7 @@ int main(int argc, char *argv[]){
 
     //打印time
     char *date=(char *)malloc(sizeof(savepath)+34);
-    sprintf(date,"date >> %sconfig.txt",savepath);
+    sprintf(date,"date >> %s/log.txt",savepath);
     printf("开始时间：%s\n",date);
     system(date);
     free(date);
@@ -418,8 +417,8 @@ int main(int argc, char *argv[]){
             printf("fileinfo.savepath=%s\n",savepath);          
             char *md5shell=(char *)malloc(1024);
             char *sha256shell=(char *)malloc(1024);
-            sprintf(md5shell,"md5sum %s >> %s/config.txt",path,savepath);
-            sprintf(sha256shell,"sha256sum %s >> %s/config.txt",path,savepath);
+            sprintf(md5shell,"md5sum %s >> %s/log.txt",path,savepath);
+            sprintf(sha256shell,"sha256sum %s >> %s/log.txt",path,savepath);
             printf("打印MD5shell:%s\n执行shell:\n",md5shell);
             printf("打印SHA256shell:%s\n执行shell:\n",sha256shell);
             system(md5shell);
@@ -433,7 +432,7 @@ int main(int argc, char *argv[]){
             printf("fileinfo.filepath=%s\n",path);
             printf("fileinfo.savepath=%s\n",savepath);          
             char *md5shell=(char *)malloc(1024);
-            sprintf(md5shell,"md5sum %s >> %s/config.txt",path,savepath);
+            sprintf(md5shell,"md5sum %s >> %s/log.txt",path,savepath);
             printf("打印MD5shell:%s\n执行shell:\n",md5shell);
             system(md5shell);
             free(md5shell);
@@ -443,7 +442,7 @@ int main(int argc, char *argv[]){
             printf("fileinfo.filepath=%s\n",path);
             printf("fileinfo.savepath=%s\n",savepath);   
             char *sha256shell=(char *)malloc(1024);
-            sprintf(sha256shell,"sha256sum %s >> %s/config.txt",path,savepath);
+            sprintf(sha256shell,"sha256sum %s >> %s/log.txt",path,savepath);
             printf("打印SHA256shell:%s\n执行shell:\n",sha256shell);
             system(sha256shell);
             free(sha256shell);
